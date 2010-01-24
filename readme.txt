@@ -25,7 +25,7 @@ Obtaining the source:
 
 Contact:
   The project's site is http://dev.openttdcoop.org/projects/ttdviewer .
-  However, the staff is usually around TT-Forums (http://www.tt-forums.net/viewforum.php?f=68) and
+  However, the staff is usually around TT-Forums (http://www.tt-forums.net/viewtopic.php?f=68&t=46927) and
   OpenTTD's IRC channel (irc://irc.oftc.net/openttd).
 
 

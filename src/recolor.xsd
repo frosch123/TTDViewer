@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ - This file is part of TTDViewer.
+ - TTDViewer is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2.
+ - TTDViewer is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with TTDViewer. If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<xs:schema elementFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:simpleType name="hexByte">
+		<xs:restriction base="xs:hexBinary">
+			<xs:length value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="hexByteList">
+		<xs:restriction>
+			<xs:simpleType>
+				<xs:list itemType="hexByte"/>
+			</xs:simpleType>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="recolor_t">
+		<xs:simpleContent>
+			<xs:restriction base="xs:anyType">
+				<xs:simpleType>
+					<xs:list>
+						<xs:simpleType>
+							<xs:union memberTypes="hexByte">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="__"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:union>
+						</xs:simpleType>
+					</xs:list>
+				</xs:simpleType>
+				<xs:attribute name="name" type="xs:token" use="required"/>
+				<xs:attribute name="desc" type="xs:token"/>
+				<xs:attribute name="sprite" type="xs:nonNegativeInteger"/>
+				<xs:attribute name="indices" default="all">
+					<xs:simpleType>
+						<xs:union memberTypes="hexByteList">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="all"/>
+									<xs:enumeration value="none"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:union>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="separateable" default="none">
+					<xs:simpleType>
+						<xs:union memberTypes="hexByteList">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="all"/>
+									<xs:enumeration value="none"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:union>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:complexType name="node_t">
+		<xs:sequence>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="recolor" type="recolor_t"/>
+				<xs:element ref="sequence"/>
+				<xs:element ref="choice"/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:token" use="required"/>
+		<xs:attribute name="desc" type="xs:token"/>
+	</xs:complexType>
+	
+	<xs:element name="sequence" type="node_t"/>
+	<xs:element name="choice" type="node_t"/>
+</xs:schema>

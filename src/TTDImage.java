@@ -72,7 +72,7 @@ public class TTDImage {
 	 * @param aImage Image to read.
 	 * @return new image, or null if the source is not valid.
 	 */
-	public static TTDImage createFrom(TTDPalette aPalette, BufferedImage aImage)
+	public static TTDImage createFrom(TTDPalette aPalette, BufferedImage aImage) throws Exception
 	{
 		if (aImage.getType() == BufferedImage.TYPE_BYTE_INDEXED) {
 			ColorModel color_model = aImage.getColorModel();
@@ -91,12 +91,10 @@ public class TTDImage {
 					maybe_win &= mayColorsBeEqual(test_color, win_color);
 				}
 			} catch (Exception e) {
-				System.out.println("Invalid indexed image.");
-				return null;
+				throw new Exception("Invalid indexed image.");
 			}
 			if (maybe_dos == maybe_win) {
-				System.out.println("Palette not detected.");
-				return null;
+				throw new Exception("Palette not detected.");
 			}
 
 			TTDImage result = createBlank(aPalette, aImage.getWidth(), aImage.getHeight());
@@ -109,8 +107,7 @@ public class TTDImage {
 			}
 			return result;
 		} else {
-			System.out.println("No indexed image.");
-			return null;
+			throw new Exception("No indexed image.");
 		}
 	}
 
@@ -123,17 +120,13 @@ public class TTDImage {
 	 * @param aFile File to read from.
 	 * @return new image, or null if the source is not valid.
 	 */
-	public static TTDImage createFrom(TTDPalette aPalette, File aFile)
+	public static TTDImage createFrom(TTDPalette aPalette, File aFile) throws Exception
 	{
-		try {
-			/* First try our own PCX thingie */
-			BufferedImage image = PCX.loadFrom(aFile);
-			if (image == null) image = ImageIO.read(aFile);
-			return createFrom(aPalette, image);
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
+		/* First try our own PCX thingie */
+		BufferedImage image = PCX.loadFrom(aFile);
+		if (image == null) image = ImageIO.read(aFile);
+		if (image == null) throw new Exception("Unknown file format");
+		return createFrom(aPalette, image);
 	}
 
 	/**
@@ -145,16 +138,13 @@ public class TTDImage {
 	 * @param aStream Stream to read from.
 	 * @return new image, or null if the source is not valid.
 	 */
-	public static TTDImage createFrom(TTDPalette aPalette, InputStream aStream)
+	public static TTDImage createFrom(TTDPalette aPalette, InputStream aStream) throws Exception
 	{
-		try {
-			/* First try our own PCX thingie */
-			BufferedImage image = PCX.loadFrom(aStream);
-			if (image == null) image = ImageIO.read(aStream);
-			return createFrom(aPalette, image);
-		} catch (Exception e) {
-			return null;
-		}
+		/* First try our own PCX thingie */
+		BufferedImage image = PCX.loadFrom(aStream);
+		if (image == null) image = ImageIO.read(aStream);
+		if (image == null) throw new Exception("Unknown file format");
+		return createFrom(aPalette, image);
 	}
 
 	/** Get image dimension. */

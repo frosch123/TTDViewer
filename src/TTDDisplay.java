@@ -45,16 +45,12 @@ public class TTDDisplay extends JPanel {
 	/**
 	 * Load new image from File.
 	 * @param aFile File to read from
-	 * @return true on success
 	 */
-	public boolean loadFrom(File aFile)
+	public void loadFrom(File aFile) throws Exception
 	{
-		TTDImage new_image = TTDImage.createFrom(fPalette, aFile);
-		if (new_image == null) return false;
-		fImage = new_image;
+		fImage = TTDImage.createFrom(fPalette, aFile);
 		fImage.recoloring = fPalette.global_recoloring;
 		updateSize();
-		return true;
 	}
 
 	/** Resize this to match image bounds and zoomlevel */

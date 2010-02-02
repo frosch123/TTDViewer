@@ -179,8 +179,11 @@ public class TTDViewer extends JFrame {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fFileChooser.getSelectedFile();
-					if (fImage.loadFrom(file)) {
+					try {
+						fImage.loadFrom(file);
 						fFileName.setText(file.getName());
+					} catch (Exception error) {
+						JOptionPane.showMessageDialog(TTDViewer.this, error.getMessage(), "Opening image failed", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}

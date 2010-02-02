@@ -82,7 +82,6 @@ public class TTDDisplay extends JPanel {
 
 	protected void paintComponent(Graphics g)
 	{
-		
 		Rectangle display_bounds = g.getClipBounds();
 		int x = display_bounds.x / fZoom;
 		int y = display_bounds.y / fZoom;
@@ -99,6 +98,14 @@ public class TTDDisplay extends JPanel {
 		int output_y = y * fZoom;
 		int output_width = width * fZoom;
 		int output_height = height * fZoom;
+
+		/* Clear background if not completely covered by image */
+		if (output_x > display_bounds.x || output_y > display_bounds.y
+				|| (output_x + output_width  < display_bounds.x + display_bounds.width )
+				|| (output_y + output_height < display_bounds.y + display_bounds.height)) {
+			g.setColor(getBackground());
+			g.fillRect(display_bounds.x, display_bounds.y, display_bounds.width, display_bounds.height);
+		}
 
 		g.drawImage(fImage.getImage(x, y, width, height), output_x, output_y, output_width, output_height, Color.WHITE, null);
 	}

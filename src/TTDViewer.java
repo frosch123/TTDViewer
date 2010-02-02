@@ -216,9 +216,10 @@ public class TTDViewer extends JFrame {
 		menu_panel.setLayout(new BoxLayout(menu_panel, BoxLayout.X_AXIS));
 		menu_panel.add(load_button);
 		menu_panel.add(fFileName);
+		menu_panel.add(Box.createHorizontalGlue());
+		menu_panel.add(fZoomLevel);
 		menu_panel.add(zoom_in_button);
 		menu_panel.add(zoom_out_button);
-		menu_panel.add(fZoomLevel);
 
 		JPanel main_panel = new JPanel();
 		main_panel.setBackground(Color.WHITE);

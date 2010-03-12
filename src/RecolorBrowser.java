@@ -591,28 +591,22 @@ public class RecolorBrowser extends JTree {
 	public Recoloring fRecoloring;
 
 	/** Listeners to notify, when selection changes. */
-	private EventListenerList fChangeEventListeres = new EventListenerList();
+	private DefaultChangeEventTrigger fChangeEventListeres = new DefaultChangeEventTrigger();
 
 	/** The listener will be notified on changes to the selected recolorings. */
 	public void addChangeListener(ChangeListener l)
 	{
-		fChangeEventListeres.add(ChangeListener.class, l);
+		fChangeEventListeres.addChangeListener(l);
 	}
 
 	public void removeChangeListener(ChangeListener l)
 	{
-		fChangeEventListeres.remove(ChangeListener.class, l);
+		fChangeEventListeres.removeChangeListener(l);
 	}
 
 	protected void fireChangeEvent()
 	{
-		ChangeEvent event = new ChangeEvent(this);
-		Object[] listeners = fChangeEventListeres.getListenerList();
-		for (int i = listeners.length - 2; i >= 0; i -= 2) {
-			if (listeners[i] == ChangeListener.class) {
-				((ChangeListener)listeners[i + 1]).stateChanged(event);
-			}
-		}
+		fChangeEventListeres.fireChangeEvent();
 	}
 
 	/** Merge selected recolorings, construct {@link #fSeparated} and {@link #fRecoloring}, and fire the event */

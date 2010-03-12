@@ -9,8 +9,11 @@ import java.awt.*;
 import java.awt.image.*;
 import javax.swing.event.*;
 
-/** Base class for indexed palettes. */
-public abstract class Palette {
+/**
+ * Base class for indexed palettes.
+ * ChangeEvents are triggered on changes to the palette or the global recoloring.
+ */
+public abstract class Palette extends DefaultChangeEventTrigger {
 	/** Current RGBA palette. */
 	protected int[] fCurrentPalette = new int[256];
 
@@ -19,31 +22,6 @@ public abstract class Palette {
 	 * Note: It is final, so everyone can refer to it. But the actualy remapping changes nevertheless.
 	 */
 	public final Recoloring global_recoloring = new Recoloring();
-
-	/** Objects to notify when global palette changes. Either wrt. palette or recoloring. */
-	private EventListenerList fChangeEventListeres = new EventListenerList();
-
-	/** The listener will be notified on changes to the palette or the global recoloring. */
-	public void addChangeListener(ChangeListener l)
-	{
-		fChangeEventListeres.add(ChangeListener.class, l);
-	}
-
-	public void removeChangeListener(ChangeListener l)
-	{
-		fChangeEventListeres.remove(ChangeListener.class, l);
-	}
-
-	protected void fireChangeEvent()
-	{
-		ChangeEvent event = new ChangeEvent(this);
-		Object[] listeners = fChangeEventListeres.getListenerList();
-		for (int i = listeners.length - 2; i >= 0; i -= 2) {
-			if (listeners[i] == ChangeListener.class) {
-				((ChangeListener)listeners[i + 1]).stateChanged(event);
-			}
-		}
-	}
 
 	/**
 	 * Switch the global recoloring.

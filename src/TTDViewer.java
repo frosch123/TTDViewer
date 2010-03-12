@@ -25,6 +25,30 @@ public class TTDViewer extends JFrame {
 	protected RecolorBrowser fRecolorBrowser;
 	protected PalettePicker fMainPalette;
 
+	/** Reloads the image if it is changed on disk. */
+	protected class AutoReloader implements ChangeListener {
+		File fFile = null;
+
+		/** Switch the file to monitor. */
+		public void changeFile(File aFile)
+		{
+			FileMonitor.removeChangeListener(this);
+			fFile = aFile;
+			FileMonitor.addChangeListener(fFile, this);
+		}
+
+		public void stateChanged(ChangeEvent e)
+		{
+			/* Try to reload the file.
+			 * Do nothing if the file is invalid or got removed, but wait until it is valid again. */
+			try {
+				fImage.loadFrom(fFile);
+			} catch (Exception error) {};
+		}
+	};
+
+	protected AutoReloader fAutoReloader = new AutoReloader();
+
 	private JCheckBoxMenuItem fSepAnimation;
 	private JCheckBoxMenuItem fSepPink;
 	private JCheckBoxMenuItem fSepRecolored;
@@ -181,6 +205,7 @@ public class TTDViewer extends JFrame {
 					File file = fFileChooser.getSelectedFile();
 					try {
 						fImage.loadFrom(file);
+						fAutoReloader.changeFile(file);
 						fFileName.setText(file.getName());
 					} catch (Exception error) {
 						JOptionPane.showMessageDialog(TTDViewer.this, error.getMessage(), "Opening image failed", JOptionPane.ERROR_MESSAGE);

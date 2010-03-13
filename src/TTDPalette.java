@@ -11,6 +11,12 @@ import javax.swing.*;
 
 /** Main class for dealing with TTD related palettised stuff. */
 public class TTDPalette extends Palette {
+	public static final int TEMPERATE    = 0;
+	public static final int ARCTIC       = 1;
+	public static final int TROPIC       = 2;
+	public static final int TOYLAND      = 3;
+	public static final int NUM_CLIMATES = 4;
+
 	/**
 	 * This is the TTD DOS Palette.
 	 * Except:
@@ -321,7 +327,7 @@ public class TTDPalette extends Palette {
 	 * Toyland uses different colors in the water cycles.
 	 * The transparency recolor map also recolors the water colors to different/matching colors.
 	 */
-	protected boolean fToyland = false;
+	protected int fClimate = TEMPERATE;
 
 	/** Current palette animation counter. Incremented by 8 every 30 ms unless paused. */
 	protected int fAnimationCounter = 0;
@@ -346,20 +352,20 @@ public class TTDPalette extends Palette {
 
 	/**
 	 * Returns the current climate setting.
-	 * @return true if toyland, false else
+	 * @return TEMPERATE, ARCTIC, TROPIC or TOYLAND
 	 */
-	public boolean getClimate()
+	public int getClimate()
 	{
-		return fToyland;
+		return fClimate;
 	}
 
 	/**
 	 * Sets the current climate setting.
-	 * @param aToyland true if toyland, false else
+	 * @param aClimate TEMPERATE, ARCTIC, TROPIC or TOYLAND
 	 */
-	public void setClimate(boolean aToyland)
+	public void setClimate(int aClimate)
 	{
-		fToyland = aToyland;
+		fClimate = aClimate;
 		buildPalette();
 	}
 
@@ -390,7 +396,7 @@ public class TTDPalette extends Palette {
 			fCurrentPalette[i] = DOS_PALETTE[i] | (i != TRANSPARENT ? 0xFF000000 : 0x00000000);
 		}
 		for (int i = 0; i < palette_animations.length; i++) {
-			palette_animations[i].applyPalette(fCurrentPalette, fAnimationCounter, fToyland);
+			palette_animations[i].applyPalette(fCurrentPalette, fAnimationCounter, fClimate == TOYLAND);
 		}
 		fireChangeEvent();
 	}

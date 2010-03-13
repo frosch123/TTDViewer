@@ -73,7 +73,7 @@ public class TTDViewer extends JFrame {
 	/** Transfer settings from buttons to the backend */
 	protected void rebuildMainPalette()
 	{
-		fPalette.setClimate(fToyland.isSelected());
+		fPalette.setClimate(fToyland.isSelected() ? TTDPalette.TOYLAND : TTDPalette.TEMPERATE);
 		fPalette.setGlobalRecoloring(fRecolorBrowser.fRecoloring);
 
 		boolean sep = fSepRecolored.isSelected();

@@ -30,6 +30,9 @@ DOC = doc
 all: validate clean
 	@mkdir -p $(OUTPUT)
 	$(JAVAC) $(JAVAC_OPTS) -sourcepath $(SRC) -classpath $(OUTPUT) -d $(OUTPUT) -s $(OUTPUT) $(SRC)/*.java
+	hg parents --template="{date|shortdate} " > $(OUTPUT)/rev.txt
+	# hg identify also checks for local modifications
+	hg identify -i >> $(OUTPUT)/rev.txt
 	cp -u $(SRC)/*.xml $(SRC)/*.xsd $(OUTPUT)
 
 validate:

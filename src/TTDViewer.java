@@ -14,6 +14,17 @@ import javax.swing.event.*;
 /** Main class containing the GUI stuff and wiring the events between the important parts. */
 public class TTDViewer extends JFrame {
 
+	/** Version string. */
+	public static final String fVersion;
+
+	static {
+		String version = "unknown version";
+		try {
+			version = (new BufferedReader(new InputStreamReader(TTDViewer.class.getResourceAsStream("rev.txt")))).readLine();
+		} catch (Exception e) {}
+		fVersion = version;
+	}
+
 	public static void main(String[] Args)
 	{
 		new TTDViewer();
@@ -95,7 +106,7 @@ public class TTDViewer extends JFrame {
 	/** Construct GUI. Naturally a mess. */
 	public TTDViewer()
 	{
-		super("TTDViewer");
+		super("TTDViewer [" + fVersion + "]");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		int[][] main_pal = new int[16][16];

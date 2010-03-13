@@ -23,6 +23,11 @@
 		</xs:restriction>
 	</xs:simpleType>
 
+	<xs:attributeGroup name="nodeAttributes">
+		<xs:attribute name="name" type="xs:token" use="required"/>
+		<xs:attribute name="desc" type="xs:token"/>
+	</xs:attributeGroup>
+
 	<xs:complexType name="recolor_t">
 		<xs:simpleContent>
 			<xs:restriction base="xs:anyType">
@@ -39,8 +44,7 @@
 						</xs:simpleType>
 					</xs:list>
 				</xs:simpleType>
-				<xs:attribute name="name" type="xs:token" use="required"/>
-				<xs:attribute name="desc" type="xs:token"/>
+				<xs:attributeGroup ref="nodeAttributes"/>
 				<xs:attribute name="sprite" type="xs:nonNegativeInteger"/>
 				<xs:attribute name="indices" default="all">
 					<xs:simpleType>
@@ -78,8 +82,7 @@
 				<xs:element ref="choice"/>
 			</xs:choice>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:token" use="required"/>
-		<xs:attribute name="desc" type="xs:token"/>
+		<xs:attributeGroup ref="nodeAttributes"/>
 	</xs:complexType>
 	
 	<xs:element name="sequence" type="node_t"/>

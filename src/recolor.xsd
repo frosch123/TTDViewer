@@ -26,6 +26,20 @@
 	<xs:attributeGroup name="nodeAttributes">
 		<xs:attribute name="name" type="xs:token" use="required"/>
 		<xs:attribute name="desc" type="xs:token"/>
+		<xs:attribute name="climates" default="temperate arctic tropic toyland">
+			<xs:simpleType>
+				<xs:list>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="temperate"/>
+							<xs:enumeration value="arctic"/>
+							<xs:enumeration value="tropic"/>
+							<xs:enumeration value="toyland"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:list>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:attributeGroup>
 
 	<xs:complexType name="recolor_t">

@@ -38,6 +38,9 @@ public class RecolorBrowser extends JTree {
 		/** Parent node, null for root. */
 		public final TreeItem parent;
 
+		/** Climates in which the item is available. */
+		public final boolean climates[] = new boolean[TTDPalette.NUM_CLIMATES];
+
 		/** The component to draw in the treeview */
 		protected JPanel fDisplay = new JPanel();
 
@@ -52,6 +55,25 @@ public class RecolorBrowser extends JTree {
 		public Recoloring getRecoloring(boolean[] aSeparated)
 		{
 			return null;
+		}
+
+		/**
+		 * Called when the climate changes.
+		 * @param aClimate new climate
+		 */
+		public void setClimate(int aClimate)
+		{
+			boolean enabled = (aClimate >= 0 && aClimate < climates.length && climates[aClimate]);
+			if (fText != null) fText.setEnabled(enabled);
+		}
+
+		/**
+		 * Checks whether the item is enabled.
+		 * @return true if enabled.
+		 */
+		public boolean isEnabled()
+		{
+			return fText == null || fText.isEnabled();
 		}
 
 		/**
@@ -96,7 +118,7 @@ public class RecolorBrowser extends JTree {
 			fText.addMouseListener(new MouseInputAdapter() {
 				public void mouseClicked(MouseEvent e)
 				{
-					doSelect();
+					if (isEnabled()) doSelect();
 				}
 			});
 		}
@@ -133,6 +155,19 @@ public class RecolorBrowser extends JTree {
 			parent = aParent;
 			name = aElement.getAttribute("name");
 			description = aElement.getAttribute("desc");
+
+			for (int i = 0; i < climates.length; i++) {
+				climates[i] = false;
+			}
+			String climate_list = aElement.getAttribute("climates");
+			String split_climates[] = climate_list.split(" ");
+			for (int i = 0; i < split_climates.length; i++) {
+				if (split_climates[i].equals("temperate")) climates[TTDPalette.TEMPERATE] = true;
+				if (split_climates[i].equals("arctic"))    climates[TTDPalette.ARCTIC]    = true;
+				if (split_climates[i].equals("tropic"))    climates[TTDPalette.TROPIC]    = true;
+				if (split_climates[i].equals("toyland"))   climates[TTDPalette.TOYLAND]   = true;
+			}
+
 			setupDisplay();
 		}
 
@@ -146,6 +181,9 @@ public class RecolorBrowser extends JTree {
 			parent = aParent;
 			name = aName;
 			description = "";
+			for (int i = 0; i < climates.length; i++) {
+				climates[i] = true;
+			}
 			setupDisplay();
 		}
 
@@ -353,6 +391,15 @@ public class RecolorBrowser extends JTree {
 		/** Children */
 		protected Vector fSubItems = new Vector();
 
+		public void setClimate(int aClimate)
+		{
+			super.setClimate(aClimate);
+			for (int i = 0; i < fSubItems.size(); i++) {
+				TreeItem sub = (TreeItem)fSubItems.get(i);
+				sub.setClimate(aClimate);
+			}
+		}
+
 		/**
 		 * Recursively merge selected child recolorings.
 		 * @param aSeparated separated color indices are set to 'true' in the array; other indices stay unmodified.
@@ -492,12 +539,27 @@ public class RecolorBrowser extends JTree {
 		/** ButtonGroup of the child items */
 		protected ButtonGroup fButtonGroup = new ButtonGroup();
 
+		public void setClimate(int aClimate)
+		{
+			super.setClimate(aClimate);
+			if (isEnabled()) {
+				TreeItem first_enabled = null;
+				for (int i = 0; i < fSubItems.size(); i++) {
+					TreeItem sub = (TreeItem)fSubItems.get(i);
+					if (!sub.isEnabled()) continue;
+					if (first_enabled == null) first_enabled = sub;
+					if (sub.isSelected()) return;
+				}
+				if (first_enabled != null) first_enabled.doSelect();
+			}
+		}
+
 		public Recoloring getRecoloring(boolean[] aSeparated)
 		{
 			Recoloring recolor = null;
 			for (int i = 0; i < fSubItems.size(); i++) {
 				TreeItem sub = (TreeItem)fSubItems.get(i);
-				if (!sub.isSelected()) continue;
+				if (!sub.isEnabled() || !sub.isSelected()) continue;
 				Recoloring sub_recolor = sub.getRecoloring(aSeparated);
 				if (sub_recolor != null) {
 					if (recolor == null) {
@@ -584,6 +646,9 @@ public class RecolorBrowser extends JTree {
 	/** Root node of the tree */
 	private TreeItem fRoot;
 
+	/** The palette to operate on */
+	protected TTDPalette fPalette;
+
 	/** Separated colors in currently selected recolorings */
 	public boolean[] fSeparated = new boolean[256];
 
@@ -626,15 +691,25 @@ public class RecolorBrowser extends JTree {
 	 * @param aRoot Root node to use
 	 * @see #createDefaultBrowser
 	 */
-	public RecolorBrowser(Palette aPalette, TreeItem aRoot)
+	public RecolorBrowser(TTDPalette aPalette, TreeItem aRoot)
 	{
 		super(aRoot);
 		fRoot = aRoot;
+		fPalette = aPalette;
+		fRoot.setClimate(fPalette.getClimate());
 
 		/* Redraw the browser, when the palette changes */
 		aPalette.addChangeListener(new ChangeListener() {
+			int fLastClimate = fPalette.getClimate();
+
 			public void stateChanged(ChangeEvent e)
 			{
+				int climate = fPalette.getClimate();
+				if (climate != fLastClimate) {
+					fLastClimate = climate;
+					fRoot.setClimate(climate);
+					rebuildRecoloring();
+				}
 				repaint();
 			}
 		});

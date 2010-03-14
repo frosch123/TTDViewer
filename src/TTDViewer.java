@@ -194,6 +194,7 @@ public class TTDViewer extends JFrame {
 		top_panel.add(main_tools, BorderLayout.SOUTH);
 
 		final JScrollPane image_scroll_pane = new JScrollPane(fImage, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		image_scroll_pane.setWheelScrollingEnabled(false);
 
 		JPanel tool_panel = new JPanel();
 		tool_panel.setBackground(Color.WHITE);

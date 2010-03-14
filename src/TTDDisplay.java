@@ -41,6 +41,33 @@ public class TTDDisplay extends JPanel {
 			}
 		});
 
+		MouseInputAdapter listener = new MouseInputAdapter() {
+			Point2D.Float fStartPixel;
+			public void mousePressed(MouseEvent e)
+			{
+				fStartPixel = pixelFromViewport(e.getPoint());
+			}
+
+			public void mouseDragged(MouseEvent e)
+			{
+				scrollPixelToScreen(fStartPixel, screenFromViewport(e.getPoint()));
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				mouseDragged(e);
+			}
+		};
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
+
+		addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e)
+			{
+				setZoomAtScreen(getZoom() - e.getWheelRotation(), screenFromViewport(e.getPoint()));
+			}
+		});
+
 		fImage = TTDImage.createBlank(aPalette, 1, 1);
 		fImage.recoloring = aPalette.global_recoloring;
 		updateSize();

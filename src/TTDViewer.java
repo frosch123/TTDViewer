@@ -233,18 +233,7 @@ public class TTDViewer extends JFrame {
 		ActionListener zoom_listener = new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				JViewport viewport = image_scroll_pane.getViewport();
-				Dimension extent = viewport.getExtentSize();
-
-				Point pos = viewport.getViewPosition();
-				pos.x = (pos.x + extent.width / 2) / fImage.getZoom();
-				pos.y = (pos.y + extent.height / 2) / fImage.getZoom();
-
-				fImage.setZoom(fImage.getZoom() + (e.getSource() == zoom_in_button ? 1 : -1));
-
-				pos.x = pos.x * fImage.getZoom() - extent.width / 2;
-				pos.y = pos.y * fImage.getZoom() - extent.height / 2;
-				viewport.setViewPosition(pos);
+				fImage.setZoomAtCenter(fImage.getZoom() + (e.getSource() == zoom_in_button ? 1 : -1));
 			}
 		};
 		fImage.addChangeListener(new ChangeListener() {

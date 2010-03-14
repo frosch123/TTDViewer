@@ -733,7 +733,8 @@ public class RecolorBrowser extends JTree {
 		addMouseListener(new MouseInputAdapter() {
 			public void mouseClicked(MouseEvent e)
 			{
-				TreePath path = getSelectionPath();
+				int row = getRowForLocation(e.getX(), e.getY());
+				TreePath path = getPathForRow(row);
 				if (path != null) {
 					Rectangle bounds = getPathBounds(path);
 					e.translatePoint(-bounds.x, -bounds.y);

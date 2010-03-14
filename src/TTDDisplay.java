@@ -23,6 +23,9 @@ public class TTDDisplay extends JPanel {
 	/** Current zoomlevel */
 	protected int fZoom = 1;
 
+	/** Listeners to notify on changes in zoom level, file loading, etc. */
+	private DefaultChangeEventTrigger fChangeEventListeres = new DefaultChangeEventTrigger();
+
 	/**
 	 * Only constructor starting with an empty image.
 	 * @param aPalette Palette to use when loading images.
@@ -53,6 +56,22 @@ public class TTDDisplay extends JPanel {
 		updateSize();
 	}
 
+	/** The listener will be notified on changes to the zoom level, file loading, etc. */
+	public void addChangeListener(ChangeListener l)
+	{
+		fChangeEventListeres.addChangeListener(l);
+	}
+
+	public void removeChangeListener(ChangeListener l)
+	{
+		fChangeEventListeres.removeChangeListener(l);
+	}
+
+	protected void fireChangeEvent()
+	{
+		fChangeEventListeres.fireChangeEvent();
+	}
+
 	/** Resize this to match image bounds and zoomlevel */
 	protected void updateSize()
 	{
@@ -60,6 +79,7 @@ public class TTDDisplay extends JPanel {
 		Dimension new_size = new Dimension(size.width * fZoom, size.height * fZoom);
 		setPreferredSize(new_size);
 		setSize(new_size);
+		fireChangeEvent();
 	}
 
 	/** Get current zoomlevel */
@@ -71,7 +91,8 @@ public class TTDDisplay extends JPanel {
 	/** Set current zoomlevel */
 	public void setZoom(int aZoom)
 	{
-		if (aZoom < 1) return;
+		if (aZoom == fZoom) return;
+		if (aZoom < 1) aZoom = 1;
 		fZoom = aZoom;
 		updateSize();
 	}

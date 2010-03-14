@@ -140,7 +140,7 @@ public class RecolorBrowser extends JTree {
 		private void setupDisplay()
 		{
 			fDisplay.setBackground(Color.WHITE);
-			if (description.length() > 0) fDisplay.setToolTipText(description); // TODO noone displays this yet
+			if (description.length() > 0) fDisplay.setToolTipText(description);
 			fDisplay.setLayout(new BorderLayout());
 			setupText(null);
 		}
@@ -283,6 +283,8 @@ public class RecolorBrowser extends JTree {
 			String sprite = aElement.getAttribute("sprite");
 			if (sprite.length() > 0) {
 				fSprite = Integer.parseInt(sprite);
+				fDisplay.setToolTipText(description + (description.length() == 0 ? "(" : " (")
+					+ Integer.toString(fSprite) + "/0x" + Integer.toHexString(fSprite) + ")");
 			}
 
 			/* Read 'indices' */
@@ -731,7 +733,6 @@ public class RecolorBrowser extends JTree {
 		addMouseListener(new MouseInputAdapter() {
 			public void mouseClicked(MouseEvent e)
 			{
-				/* TODO Tooltips do not work yet */
 				TreePath path = getSelectionPath();
 				if (path != null) {
 					Rectangle bounds = getPathBounds(path);
@@ -761,6 +762,7 @@ public class RecolorBrowser extends JTree {
 
 		setRootVisible(false);
 		setBackground(Color.WHITE);
+		ToolTipManager.sharedInstance().registerComponent(this);
 	}
 
 	/**

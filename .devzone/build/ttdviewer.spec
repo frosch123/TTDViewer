@@ -41,7 +41,7 @@ install -D -m0644 release/TTDViewer.jar %{buildroot}/%{_javadir}/TTDViewer.jar
 
 cat >TTDViewer <<EOF
 #!/bin/sh
-java -jar %{_javadir}/TTDViewer.jar
+java -jar %{_javadir}/TTDViewer.jar "$@"
 EOF
 install -D -m755 TTDViewer %{buildroot}/%{_bindir}/TTDViewer
 

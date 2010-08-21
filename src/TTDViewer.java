@@ -107,7 +107,8 @@ public class TTDViewer extends JFrame {
 	public TTDViewer()
 	{
 		super("TTDViewer [" + fVersion + "]");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		ApplicationControl.addWindow(this);
 
 		int[][] main_pal = new int[16][16];
 		for (int i = 0; i < 16; i++) {

@@ -11,7 +11,7 @@ Source0:        %{name}-%{version}.tar
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-BuildArch:			i586
+BuildArch:			noarch
 
 BuildRequires:  java-1.6.0-openjdk-devel
 BuildRequires:  libxml2 

@@ -115,12 +115,34 @@ public class TTDViewer extends JFrame {
 		}
 	}
 
-	/** Construct GUI. Naturally a mess. */
+	/**
+	 * Open new window.
+	 * @param aFile File to open, may be null to display empty window.
+	 * @param aLocation Position the window at a specific spot, may be null for default position.
+	 */
+	public TTDViewer(File aFile, Point aLocation)
+	{
+		this(aLocation);
+		if (aFile != null) changeFile(aFile);
+	}
+
+	/** Open new empty window in default position */
 	public TTDViewer()
+	{
+		this(null);
+	}
+
+	/**
+	 * Open new empty window.
+	 * @param aLocation Position the window at a specific spot, may be null for default position.
+	 */
+	public TTDViewer(Point aLocation)
 	{
 		super("TTDViewer [" + fVersion + "]");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		ApplicationControl.addWindow(this);
+
+		if (aLocation != null) setLocation(aLocation);
 
 		int[][] main_pal = new int[16][16];
 		for (int i = 0; i < 16; i++) {

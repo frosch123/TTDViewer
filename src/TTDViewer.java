@@ -40,6 +40,12 @@ public class TTDViewer extends JFrame {
 	protected class AutoReloader implements ChangeListener {
 		File fFile = null;
 
+		/** Return currently monitored file. */
+		public File getFile()
+		{
+			return fFile;
+		}
+
 		/** Switch the file to monitor. */
 		public void changeFile(File aFile)
 		{
@@ -249,7 +255,15 @@ public class TTDViewer extends JFrame {
 				int returnVal = fFileChooser.showOpenDialog(TTDViewer.this);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					changeFile(fFileChooser.getSelectedFile());
+					if (fAutoReloader.getFile() == null) {
+						/* Use current window */
+						changeFile(fFileChooser.getSelectedFile());
+					} else {
+						/* Open new window */
+						Point location = getLocation();
+						location.translate(20, 30);
+						TTDViewer viewer = new TTDViewer(fFileChooser.getSelectedFile(), location);
+					}
 				}
 			}
 		});

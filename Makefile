@@ -48,7 +48,7 @@ jar: all
 	@mkdir -p $(RELEASE)
 	@echo "$(JAVA) -jar $(MAIN).jar" > $(RELEASE)/$(MAIN).bat
 	@echo "#!/bin/sh" > $(RELEASE)/$(MAIN).sh
-	@echo "$(JAVA) -jar $(MAIN).jar" >> $(RELEASE)/$(MAIN).sh
+	@echo '$(JAVA) -jar `readlink $$0 | xargs dirname`/$(MAIN).jar' >> $(RELEASE)/$(MAIN).sh
 	@chmod 644 $(RELEASE)/$(MAIN).bat
 	@chmod 755 $(RELEASE)/$(MAIN).sh
 	@cp COPYING readme.txt $(RELEASE)

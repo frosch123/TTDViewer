@@ -27,7 +27,18 @@ public class TTDViewer extends JFrame {
 
 	public static void main(String[] Args)
 	{
-		new TTDViewer();
+		if (Args.length == 0) {
+			new TTDViewer();
+		} else {
+			/* Open first window in some default location, position the
+			 * rest relative to the position of the first window. */
+			Point location = null;
+			for (int i = 0; i < Args.length; i++) {
+				TTDViewer viewer = new TTDViewer(new File(Args[i]), location);
+				if (location == null) location = viewer.getLocation();
+				if (i < 10) location.translate(20, 30);
+			}
+		}
 	}
 
 	public TTDPalette fPalette = new TTDPalette();

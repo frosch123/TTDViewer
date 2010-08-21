@@ -103,6 +103,18 @@ public class TTDViewer extends JFrame {
 		fMainPalette.repaint();
 	}
 
+	/** Display a specific file in this window. */
+	public void changeFile(File aFile)
+	{
+		try {
+			fImage.loadFrom(aFile);
+			fAutoReloader.changeFile(aFile);
+			fFileName.setText(aFile.getName());
+		} catch (Exception error) {
+			JOptionPane.showMessageDialog(this, error.getMessage(), "Opening image failed", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 	/** Construct GUI. Naturally a mess. */
 	public TTDViewer()
 	{
@@ -215,14 +227,7 @@ public class TTDViewer extends JFrame {
 				int returnVal = fFileChooser.showOpenDialog(TTDViewer.this);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fFileChooser.getSelectedFile();
-					try {
-						fImage.loadFrom(file);
-						fAutoReloader.changeFile(file);
-						fFileName.setText(file.getName());
-					} catch (Exception error) {
-						JOptionPane.showMessageDialog(TTDViewer.this, error.getMessage(), "Opening image failed", JOptionPane.ERROR_MESSAGE);
-					}
+					changeFile(fFileChooser.getSelectedFile());
 				}
 			}
 		});

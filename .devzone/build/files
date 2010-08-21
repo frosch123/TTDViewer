@@ -1,0 +1,3 @@
+R;/usr/src/packages/RPMS/%{ARCH}/*.%{ARCH}.rpm
+5;/usr/src/packages/SRPMS/*.src.rpm
+5;%{BUILD}/*.zip

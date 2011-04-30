@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.*;
+import javax.swing.filechooser.FileFilter;
 
 /** Main class containing the GUI stuff and wiring the events between the important parts. */
 public class TTDViewer extends JFrame {
@@ -84,9 +86,16 @@ public class TTDViewer extends JFrame {
 	private JRadioButtonMenuItem fToyland;
 
 	static private JFileChooser fFileChooser = new JFileChooser();
+	static FileFilter fPNGPCXFilter = new FileNameExtensionFilter("PNG and PCX images", "png", "pcx");
+	static FileFilter fPNGFilter = new FileNameExtensionFilter("PNG images", "png");
+	static FileFilter fPCXFilter = new FileNameExtensionFilter("PCX images", "pcx");
 
 	static {
 		fFileChooser.setCurrentDirectory(new File("."));
+		fFileChooser.addChoosableFileFilter(fPNGPCXFilter);
+		fFileChooser.addChoosableFileFilter(fPNGFilter);
+		fFileChooser.addChoosableFileFilter(fPCXFilter);
+		fFileChooser.setFileFilter(fPNGPCXFilter);
 	}
 
 	private JLabel fZoomLevel;
@@ -260,7 +269,7 @@ public class TTDViewer extends JFrame {
 		tool_panel.add(top_panel, BorderLayout.NORTH);
 
 		fFileName = new JLabel("");
-		/* TODO FileFilter, Preview? */
+		/* TODO Preview? */
 
 		JButton load_button = new JButton("open file");
 		load_button.addActionListener(new ActionListener() {

@@ -14,16 +14,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.imageio.*;
 
-/** Class to hold a TTD related image, recolour it and draw it or subsets of it. */
+/** Class to hold a TTD related image, recolor it and draw it or subsets of it. */
 public class TTDImage {
 	/** Image with indexed colors */
 	protected WritableRaster fPixelData = null;
-
-	/** Palette to use */
-	protected TTDPalette fPalette;
-
-	/** Recoloring to apply before drawing */
-	public Recoloring recoloring = null;
 
 	/**
 	 * Create an image.
@@ -33,9 +27,8 @@ public class TTDImage {
 	 * @see #createBlank
 	 * @see #createFrom
 	 */
-	public TTDImage(TTDPalette aPalette, WritableRaster aRaster)
+	public TTDImage(WritableRaster aRaster)
 	{
-		fPalette = aPalette;
 		fPixelData = aRaster;
 	}
 
@@ -50,7 +43,7 @@ public class TTDImage {
 	{
 		IndexColorModel color_model = aPalette.getColorModel();
 		WritableRaster pixel_data = color_model.createCompatibleWritableRaster(aWidth, aHeight);
-		return new TTDImage(aPalette, pixel_data);
+		return new TTDImage(pixel_data);
 	}
 
 	/**
@@ -153,29 +146,39 @@ public class TTDImage {
 		return fPixelData.getBounds().getSize();
 	}
 
-	/** Return a BufferedImage of the image using the current palette and recoloring. */
-	public BufferedImage getImage()
+	/**
+	 * Returns a WritableRaster of the image.
+	 */
+	public WritableRaster getRaster()
 	{
-		return new BufferedImage(fPalette.getColorModel(recoloring), fPixelData, false, null);
+		return fPixelData;
 	}
 
 	/**
-	 * Return a BufferedImage of a part of the image using the current palette and recoloring.
+	 * Return a BufferedImage of the image.
+	 */
+	public BufferedImage getImage(ColorModel aColorModel)
+	{
+		return new BufferedImage(aColorModel, fPixelData, false, null);
+	}
+
+	/**
+	 * Return a BufferedImage of a part of the image.
 	 * If the selected rectangle extents the image dimension it is clipped at its border.
 	 */
-	public BufferedImage getImage(Rectangle rect)
+	public BufferedImage getImage(ColorModel aColorModel, Rectangle rect)
 	{
 		Rectangle valid = rect.intersection(fPixelData.getBounds());
 		WritableRaster sub_raster = fPixelData.createWritableChild(valid.x, valid.y, valid.width, valid.height, 0, 0, null);
-		return new BufferedImage(fPalette.getColorModel(recoloring), sub_raster, false, null);
+		return new BufferedImage(aColorModel, sub_raster, false, null);
 	}
 
 	/**
-	 * Return a BufferedImage of a part of the image using the current palette and recoloring.
+	 * Return a BufferedImage of a part of the image using the current palette and recolored.
 	 * If the selected rectangle extents the image dimension it is clipped at its border.
 	 */
-	public BufferedImage getImage(int x, int y, int width, int height)
+	public BufferedImage getImage(ColorModel aColorModel, int x, int y, int width, int height)
 	{
-		return getImage(new Rectangle(x, y, width, height));
+		return getImage(aColorModel, new Rectangle(x, y, width, height));
 	}
 }

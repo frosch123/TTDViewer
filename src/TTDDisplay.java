@@ -69,7 +69,6 @@ public class TTDDisplay extends JPanel {
 		});
 
 		fImage = TTDImage.createBlank(aPalette, 1, 1);
-		fImage.recoloring = aPalette.global_recoloring;
 		updateSize();
 	}
 
@@ -80,7 +79,6 @@ public class TTDDisplay extends JPanel {
 	public void loadFrom(File aFile) throws Exception
 	{
 		fImage = TTDImage.createFrom(fPalette, aFile);
-		fImage.recoloring = fPalette.global_recoloring;
 		updateSize();
 	}
 
@@ -280,6 +278,7 @@ public class TTDDisplay extends JPanel {
 			g.fillRect(display_bounds.x, display_bounds.y, display_bounds.width, display_bounds.height);
 		}
 
-		g.drawImage(fImage.getImage(x, y, width, height), output_x, output_y, output_width, output_height, Color.WHITE, null);
+		ColorModel color_model = fPalette.getColorModel(fPalette.global_recoloring);
+		g.drawImage(fImage.getImage(color_model, x, y, width, height), output_x, output_y, output_width, output_height, Color.WHITE, null);
 	}
 }

@@ -83,7 +83,12 @@ public class TTDViewer extends JFrame {
 	private JCheckBoxMenuItem fSepPureWhite;
 	private JRadioButtonMenuItem fToyland;
 
-	private JFileChooser fFileChooser;
+	static private JFileChooser fFileChooser = new JFileChooser();
+
+	static {
+		fFileChooser.setCurrentDirectory(new File("."));
+	}
+
 	private JLabel fZoomLevel;
 	private JLabel fFileName;
 
@@ -254,8 +259,6 @@ public class TTDViewer extends JFrame {
 		tool_panel.add(browser_scroll_pane, BorderLayout.CENTER);
 		tool_panel.add(top_panel, BorderLayout.NORTH);
 
-		fFileChooser = new JFileChooser();
-		fFileChooser.setCurrentDirectory(new File("."));
 		fFileName = new JLabel("");
 		/* TODO FileFilter, Preview? */
 

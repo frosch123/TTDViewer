@@ -12,6 +12,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.imageio.*;
 
 /** Displays a TTDImage */
 public class TTDDisplay extends JPanel {
@@ -80,6 +81,52 @@ public class TTDDisplay extends JPanel {
 	{
 		fImage = TTDImage.createFrom(fPalette, aFile);
 		updateSize();
+	}
+
+	/**
+	 * Save the image to File.
+	 * @param aFile File to write to
+	 * @param aSaveRecolored Save recolored
+	 * @param aSaveZoomed Save zoomed
+	 * @param aSaveAnimState Use the current animation state; else use a fixed state
+	 */
+	public void saveTo(File aFile, String aFileFormat, boolean aSaveRecolored, boolean aSaveZoomed, boolean aSaveAnimState) throws Exception
+	{
+		Palette pal = aSaveAnimState ? fPalette : fPalette.getUnanimatedPalette();
+		IndexColorModel color_model = pal.getColorModel();
+
+		WritableRaster pixel_data = fImage.getRaster();
+		int width = pixel_data.getWidth();
+		int height = pixel_data.getHeight();
+
+		if (aSaveRecolored) {
+			WritableRaster recolored = color_model.createCompatibleWritableRaster(width, height);
+			fPalette.global_recoloring.applyTo(pixel_data, recolored);
+			pixel_data = recolored;
+		}
+
+		if (aSaveZoomed && fZoom > 1) {
+			WritableRaster zoomed = color_model.createCompatibleWritableRaster(width * fZoom, height * fZoom);
+			int[] row_in = new int[width];
+			int[] row_out = new int[width * fZoom];
+			for (int y = 0; y < height; y++) {
+				pixel_data.getSamples(0, y, width, 1, 0, row_in);
+				for (int x = 0; x < width; x++) {
+					for (int i = 0; i < fZoom; i++) {
+						row_out[x * fZoom + i] = row_in[x];
+					}
+				}
+				for (int i = 0; i < fZoom; i++) {
+					zoomed.setSamples(0, y * fZoom + i, width * fZoom, 1, 0, row_out);
+				}
+			}
+			pixel_data = zoomed;
+		}
+
+		BufferedImage output_image = new BufferedImage(color_model, pixel_data, false, null);
+		if (!ImageIO.write(output_image, aFileFormat, aFile)) {
+			throw new Exception("No writer for this file format available.");
+		}
 	}
 
 	/** The listener will be notified on changes to the zoom level, file loading, etc. */

@@ -90,14 +90,43 @@ public class TTDViewer extends JFrame {
 	static FileFilter fPNGFilter = new FileNameExtensionFilter("PNG images", "png");
 	static FileFilter fPCXFilter = new FileNameExtensionFilter("PCX images", "pcx");
 
+	static private JFileChooser fFileSaveChooser = new JFileChooser() {
+		public void approveSelection()
+		{
+			File file = getSelectedFile();
+			if (file != null && file.exists()) {
+				int returnVal = JOptionPane.showConfirmDialog(this, "Overwrite existing file '" + file.getName() + "'?", "Overwrite file", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				if (returnVal != JOptionPane.YES_OPTION) return;
+			}
+			super.approveSelection();
+		}
+	};
+	static private JCheckBox fFileSaveRecolor = new JCheckBox("save recolored", true);
+	static private JCheckBox fFileSaveZoom = new JCheckBox("save zoomed", false);
+	static private JCheckBox fFileSaveAnimState = new JCheckBox("use current animation state", false);
+
 	static {
 		fFileChooser.setCurrentDirectory(new File("."));
 		fFileChooser.addChoosableFileFilter(fPNGPCXFilter);
 		fFileChooser.addChoosableFileFilter(fPNGFilter);
 		fFileChooser.addChoosableFileFilter(fPCXFilter);
 		fFileChooser.setFileFilter(fPNGPCXFilter);
+
+		JPanel saveAsOptions = new JPanel();
+		saveAsOptions.setLayout(new BoxLayout(saveAsOptions, BoxLayout.Y_AXIS));
+		saveAsOptions.add(fFileSaveRecolor);
+		saveAsOptions.add(fFileSaveZoom);
+		saveAsOptions.add(fFileSaveAnimState);
+
+		fFileSaveChooser.setCurrentDirectory(new File("."));
+		fFileSaveChooser.setAccessory(saveAsOptions);
+		fFileSaveChooser.addChoosableFileFilter(fPNGFilter);
+		fFileSaveChooser.setAcceptAllFileFilterUsed(false);
+		fFileSaveChooser.setFileFilter(fPNGFilter);
+		/* TODO saving of PCX images */
 	}
 
+	private JButton fSaveAsButton;
 	private JLabel fZoomLevel;
 	private JLabel fFileName;
 
@@ -141,6 +170,7 @@ public class TTDViewer extends JFrame {
 			fImage.loadFrom(aFile);
 			fAutoReloader.changeFile(aFile);
 			fFileName.setText(aFile.getName());
+			fSaveAsButton.setEnabled(true);
 		} catch (Exception error) {
 			JOptionPane.showMessageDialog(this, error.getMessage(), "Opening image failed", JOptionPane.ERROR_MESSAGE);
 		}
@@ -291,6 +321,22 @@ public class TTDViewer extends JFrame {
 			}
 		});
 
+		fSaveAsButton = new JButton("save as");
+		fSaveAsButton.setEnabled(false);
+		fSaveAsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				int returnVal = fFileSaveChooser.showSaveDialog(TTDViewer.this);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try {
+						fImage.saveTo(fFileSaveChooser.getSelectedFile(), "png", fFileSaveRecolor.isSelected(), fFileSaveZoom.isSelected(), fFileSaveAnimState.isSelected());
+					} catch (Exception error) {
+						JOptionPane.showMessageDialog(TTDViewer.this, error.getMessage(), "Saving image failed", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+
 		fZoomLevel = new JLabel("1x");
 
 		final JButton zoom_in_button = new JButton("zoom in");
@@ -315,6 +361,7 @@ public class TTDViewer extends JFrame {
 		JPanel menu_panel = new JPanel();
 		menu_panel.setLayout(new BoxLayout(menu_panel, BoxLayout.X_AXIS));
 		menu_panel.add(load_button);
+		menu_panel.add(fSaveAsButton);
 		menu_panel.add(fFileName);
 		menu_panel.add(Box.createHorizontalGlue());
 		menu_panel.add(fZoomLevel);

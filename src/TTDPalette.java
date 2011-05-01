@@ -400,4 +400,17 @@ public class TTDPalette extends Palette {
 		}
 		fireChangeEvent();
 	}
+
+	/** Build the raw palette with fixed animation state */
+	public Palette getUnanimatedPalette()
+	{
+		Palette pal = new Palette();
+		for (int i = 0; i < 256; i++) {
+			pal.fCurrentPalette[i] = DOS_PALETTE[i] | (i != TRANSPARENT ? 0xFF000000 : 0x00000000);
+		}
+		for (int i = 0; i < palette_animations.length; i++) {
+			palette_animations[i].applyPalette(pal.fCurrentPalette, 0, fClimate == TOYLAND);
+		}
+		return pal;
+	}
 };

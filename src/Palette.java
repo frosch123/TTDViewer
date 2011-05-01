@@ -13,7 +13,7 @@ import javax.swing.event.*;
  * Base class for indexed palettes.
  * ChangeEvents are triggered on changes to the palette or the global recoloring.
  */
-public abstract class Palette extends DefaultChangeEventTrigger {
+public class Palette extends DefaultChangeEventTrigger {
 	/** Current RGBA palette. */
 	protected int[] fCurrentPalette = new int[256];
 
@@ -22,6 +22,11 @@ public abstract class Palette extends DefaultChangeEventTrigger {
 	 * Note: It is final, so everyone can refer to it. But the actualy remapping changes nevertheless.
 	 */
 	public final Recoloring global_recoloring = new Recoloring();
+
+	/** Protected dummy constructor to prevent public construction */
+	protected Palette()
+	{
+	}
 
 	/**
 	 * Switch the global recoloring.

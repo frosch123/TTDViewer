@@ -70,6 +70,9 @@ class PalettePicker extends JPanel {
 		setMinimumSize(new Dimension(fColors[0].length * 16, fColors.length * 16));
 		setMaximumSize(new Dimension(fColors[0].length * 16, fColors.length * 16));
 		setBackground(Color.WHITE);
+
+		/* Enable tooltips */
+		ToolTipManager.sharedInstance().registerComponent(this);
 	}
 
 	/**
@@ -81,6 +84,60 @@ class PalettePicker extends JPanel {
 	public PalettePicker(Palette aPalette, Recoloring aRecoloring, int[] aColors)
 	{
 		this(aPalette, aRecoloring, new int[][] {aColors});
+	}
+
+	/**
+	 * Displays a tooltip for a particular colour entry.
+	 */
+	public String getToolTipText(MouseEvent event)
+	{
+		int rows = fColors.length;
+		int cols = fColors[0].length;
+
+		Dimension size = getSize();
+		int sizex = size.width / cols;
+		int sizey = size.height / rows;
+		int offsx = (size.width - sizex * cols) / 2;
+		int offsy = (size.height - sizey * rows) / 2;
+
+		int x = event.getX() - offsx;
+		int y = event.getY() - offsy;
+		int cellx = x / sizex;
+		int celly = y / sizey;
+		int innerx = x % sizex;
+		int innery = y % sizey;
+
+		if (cellx < 0 || cellx >= cols || celly < 0 || celly >= rows) return null;
+		if (innerx <= 0 || innerx >= sizex - 1 || innery <= 0 || innery >= sizey - 1) return null;
+
+		int original = fColors[celly][cellx];
+		if (hide_color[original]) return null;
+
+		int recolored = fRecoloring.fRemap[original];
+		Color real_color = fPalette.getColor(recolored);
+		String tooltip = "Index: " + original + (original >= 0x10 ? "/0x" : "/0x0") + Integer.toHexString(original) + "\n";
+		if (recolored != original) {
+			tooltip += "Recolored to: " + recolored + (recolored >= 0x10 ? "/0x" : "/0x0") + Integer.toHexString(recolored) + "\n";
+		}
+		if (real_color.getAlpha() != 255) {
+			tooltip += "Color: transparent";
+		} else {
+			int r = real_color.getRed();
+			int g = real_color.getGreen();
+			int b = real_color.getBlue();
+			tooltip += "Color: #" + (r >= 0x10 ? "" : "0") + Integer.toHexString(r) + (g >= 0x10 ? "" : "0") + Integer.toHexString(g) + (b >= 0x10 ? "" : "0") + Integer.toHexString(b);
+			tooltip += "\nRed: "   + r + (r >= 0x10 ? "/0x" : "/0x0") + Integer.toHexString(r);
+			tooltip += "\nGreen: " + g + (g >= 0x10 ? "/0x" : "/0x0") + Integer.toHexString(g);
+			tooltip += "\nBlue: "  + b + (b >= 0x10 ? "/0x" : "/0x0") + Integer.toHexString(b);
+		}
+		return tooltip;
+	}
+
+	public JToolTip createToolTip()
+	{
+		JToolTip tip = new MultiLineToolTip();
+		tip.setComponent(this);
+		return tip;
 	}
 
 	protected void paintComponent(Graphics g)

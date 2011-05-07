@@ -64,7 +64,7 @@ public class FileMonitor {
 
 	/** Timer checking all monitored files for modification. */
 	protected static javax.swing.Timer fTimer = new javax.swing.Timer(1000, new ActionListener() {
-		public void actionPerformed(ActionEvent evt)
+		@Override public void actionPerformed(ActionEvent evt)
 		{
 			Iterator it = fItems.values().iterator();
 			while (it.hasNext()) {

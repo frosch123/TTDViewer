@@ -36,7 +36,7 @@ public class TTDDisplay extends JPanel {
 	{
 		fPalette = aPalette;
 		fPalette.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e)
+			@Override public void stateChanged(ChangeEvent e)
 			{
 				repaint();
 			}
@@ -44,17 +44,17 @@ public class TTDDisplay extends JPanel {
 
 		MouseInputAdapter listener = new MouseInputAdapter() {
 			Point2D.Float fStartPixel;
-			public void mousePressed(MouseEvent e)
+			@Override public void mousePressed(MouseEvent e)
 			{
 				fStartPixel = pixelFromViewport(e.getPoint());
 			}
 
-			public void mouseDragged(MouseEvent e)
+			@Override public void mouseDragged(MouseEvent e)
 			{
 				scrollPixelToScreen(fStartPixel, screenFromViewport(e.getPoint()));
 			}
 
-			public void mouseReleased(MouseEvent e)
+			@Override public void mouseReleased(MouseEvent e)
 			{
 				mouseDragged(e);
 			}
@@ -63,7 +63,7 @@ public class TTDDisplay extends JPanel {
 		addMouseMotionListener(listener);
 
 		addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent e)
+			@Override public void mouseWheelMoved(MouseWheelEvent e)
 			{
 				setZoomAtScreen(getZoom() - e.getWheelRotation(), screenFromViewport(e.getPoint()));
 			}
@@ -298,7 +298,7 @@ public class TTDDisplay extends JPanel {
 		}
 	}
 
-	protected void paintComponent(Graphics g)
+	@Override protected void paintComponent(Graphics g)
 	{
 		Rectangle display_bounds = g.getClipBounds();
 		int x = display_bounds.x / fZoom;

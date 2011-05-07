@@ -54,7 +54,7 @@ class PalettePicker extends JPanel {
 		fRecoloring = aRecoloring;
 
 		fPalette.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e)
+			@Override public void stateChanged(ChangeEvent e)
 			{
 				repaint();
 			}
@@ -89,7 +89,7 @@ class PalettePicker extends JPanel {
 	/**
 	 * Displays a tooltip for a particular colour entry.
 	 */
-	public String getToolTipText(MouseEvent event)
+	@Override public String getToolTipText(MouseEvent event)
 	{
 		int rows = fColors.length;
 		int cols = fColors[0].length;
@@ -133,14 +133,14 @@ class PalettePicker extends JPanel {
 		return tooltip;
 	}
 
-	public JToolTip createToolTip()
+	@Override public JToolTip createToolTip()
 	{
 		JToolTip tip = new MultiLineToolTip();
 		tip.setComponent(this);
 		return tip;
 	}
 
-	protected void paintComponent(Graphics g)
+	@Override protected void paintComponent(Graphics g)
 	{
 		Dimension size = getSize();
 		g.setColor(Color.WHITE);

@@ -37,7 +37,7 @@ public class ApplicationControl {
 	{
 		if (fWindows.add(aWindow)) {
 			aWindow.addWindowListener(new WindowAdapter() {
-				public void windowClosed(WindowEvent e)
+				@Override public void windowClosed(WindowEvent e)
 				{
 					removeWindow(e.getWindow());
 				}

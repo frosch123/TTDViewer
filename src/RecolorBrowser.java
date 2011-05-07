@@ -116,7 +116,7 @@ public class RecolorBrowser extends JTree {
 
 			/* dispatchEvent does not work here, no idea, see below */
 			fText.addMouseListener(new MouseInputAdapter() {
-				public void mouseClicked(MouseEvent e)
+				@Override public void mouseClicked(MouseEvent e)
 				{
 					if (isEnabled()) doSelect();
 				}
@@ -193,37 +193,37 @@ public class RecolorBrowser extends JTree {
 			return fDisplay;
 		}
 
-		public Enumeration children()
+		@Override public Enumeration children()
 		{
 			return null;
 		}
 
-		public boolean getAllowsChildren()
+		@Override public boolean getAllowsChildren()
 		{
 			return false;
 		}
 
-		public TreeNode getChildAt(int childIndex)
+		@Override public TreeNode getChildAt(int childIndex)
 		{
 			return null;
 		}
 
-		public int getChildCount()
+		@Override public int getChildCount()
 		{
 			return 0;
 		}
 
-		public int getIndex(TreeNode node)
+		@Override public int getIndex(TreeNode node)
 		{
 			return -1;
 		}
 
-		public TreeNode getParent()
+		@Override public TreeNode getParent()
 		{
 			return parent;
 		}
 
-		public boolean isLeaf()
+		@Override public boolean isLeaf()
 		{
 			return true;
 		}
@@ -245,7 +245,7 @@ public class RecolorBrowser extends JTree {
 		 * @param aSeparated separated color indices are set to 'true' in the array; other indices stay unmodified.
 		 * @return recoloring of the item
 		 */
-		public Recoloring getRecoloring(boolean[] aSeparated)
+		@Override public Recoloring getRecoloring(boolean[] aSeparated)
 		{
 			for (int i = 0; i < fSeparate.length; i++) {
 				aSeparated[fSeparate[i]] = true;
@@ -360,7 +360,7 @@ public class RecolorBrowser extends JTree {
 		public PaletteAnimation fCycle;
 
 		/** Handler of the CheckBox */
-		public void doSelect()
+		@Override public void doSelect()
 		{
 			JCheckBox checkbox = (JCheckBox)fText;
 			checkbox.setSelected(!checkbox.isSelected());
@@ -368,7 +368,7 @@ public class RecolorBrowser extends JTree {
 		}
 
 		/** Set up the checkbox */
-		protected void setupText(JComponent aText)
+		@Override protected void setupText(JComponent aText)
 		{
 			super.setupText(new JCheckBox(name, true));
 		}
@@ -393,7 +393,7 @@ public class RecolorBrowser extends JTree {
 		/** Children */
 		protected Vector fSubItems = new Vector();
 
-		public void setClimate(int aClimate)
+		@Override public void setClimate(int aClimate)
 		{
 			super.setClimate(aClimate);
 			for (int i = 0; i < fSubItems.size(); i++) {
@@ -407,7 +407,7 @@ public class RecolorBrowser extends JTree {
 		 * @param aSeparated separated color indices are set to 'true' in the array; other indices stay unmodified.
 		 * @return recoloring of the item
 		 */
-		public Recoloring getRecoloring(boolean[] aSeparated)
+		@Override public Recoloring getRecoloring(boolean[] aSeparated)
 		{
 			Recoloring recolor = null;
 			for (int i = 0; i < fSubItems.size(); i++) {
@@ -505,32 +505,32 @@ public class RecolorBrowser extends JTree {
 			super(aParent, aElement);
 		}
 
-		public Enumeration children()
+		@Override public Enumeration children()
 		{
 			return fSubItems.elements();
 		}
 
-		public boolean getAllowsChildren()
+		@Override public boolean getAllowsChildren()
 		{
 			return true;
 		}
 
-		public TreeNode getChildAt(int childIndex)
+		@Override public TreeNode getChildAt(int childIndex)
 		{
 			return (TreeItem)fSubItems.get(childIndex);
 		}
 
-		public int getChildCount()
+		@Override public int getChildCount()
 		{
 			return fSubItems.size();
 		}
 
-		public int getIndex(TreeNode node)
+		@Override public int getIndex(TreeNode node)
 		{
 			return fSubItems.indexOf(node);
 		}
 
-		public boolean isLeaf()
+		@Override public boolean isLeaf()
 		{
 			return false;
 		}
@@ -541,7 +541,7 @@ public class RecolorBrowser extends JTree {
 		/** ButtonGroup of the child items */
 		protected ButtonGroup fButtonGroup = new ButtonGroup();
 
-		public void setClimate(int aClimate)
+		@Override public void setClimate(int aClimate)
 		{
 			super.setClimate(aClimate);
 			if (isEnabled()) {
@@ -556,7 +556,7 @@ public class RecolorBrowser extends JTree {
 			}
 		}
 
-		public Recoloring getRecoloring(boolean[] aSeparated)
+		@Override public Recoloring getRecoloring(boolean[] aSeparated)
 		{
 			Recoloring recolor = null;
 			for (int i = 0; i < fSubItems.size(); i++) {
@@ -574,7 +574,7 @@ public class RecolorBrowser extends JTree {
 			return recolor;
 		}
 
-		public void append(TreeItem aItem)
+		@Override public void append(TreeItem aItem)
 		{
 			super.append(aItem);
 			aItem.addToButtonGroup(fButtonGroup);
@@ -704,7 +704,7 @@ public class RecolorBrowser extends JTree {
 		aPalette.addChangeListener(new ChangeListener() {
 			int fLastClimate = fPalette.getClimate();
 
-			public void stateChanged(ChangeEvent e)
+			@Override public void stateChanged(ChangeEvent e)
 			{
 				int climate = fPalette.getClimate();
 				if (climate != fLastClimate) {
@@ -719,7 +719,7 @@ public class RecolorBrowser extends JTree {
 
 		/* Register item painter */
 		setCellRenderer(new TreeCellRenderer() {
-			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
+			@Override public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
 			{
 				TreeItem item = (TreeItem)value;
 				Component display = item.getDisplay();
@@ -731,7 +731,7 @@ public class RecolorBrowser extends JTree {
 
 		/* Register mouse handler */
 		addMouseListener(new MouseInputAdapter() {
-			public void mouseClicked(MouseEvent e)
+			@Override public void mouseClicked(MouseEvent e)
 			{
 				int row = getRowForLocation(e.getX(), e.getY());
 				TreePath path = getPathForRow(row);

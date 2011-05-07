@@ -11,7 +11,7 @@ import javax.swing.*;
 public class MultiLineToolTip extends JToolTip {
 	String[] lines = null;
 
-	public void setTipText(String tipText)
+	@Override public void setTipText(String tipText)
 	{
 		lines = tipText.split("\n");
 		Insets insets = getInsets();
@@ -27,7 +27,7 @@ public class MultiLineToolTip extends JToolTip {
 		setPreferredSize(new Dimension(insets.left + insets.right + w + 6, insets.top + insets.bottom + h));
 	}
 
-	public void paint(Graphics g)
+	@Override public void paint(Graphics g)
 	{
 		super.paint(g);
 

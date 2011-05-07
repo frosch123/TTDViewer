@@ -67,7 +67,7 @@ public class TTDViewer extends JFrame {
 			FileMonitor.addChangeListener(fFile, this);
 		}
 
-		public void stateChanged(ChangeEvent e)
+		@Override public void stateChanged(ChangeEvent e)
 		{
 			/* Try to reload the file.
 			 * Do nothing if the file is invalid or got removed, but wait until it is valid again. */
@@ -91,7 +91,7 @@ public class TTDViewer extends JFrame {
 	static FileFilter fPCXFilter = new FileNameExtensionFilter("PCX images", "pcx");
 
 	static private JFileChooser fFileSaveChooser = new JFileChooser() {
-		public void approveSelection()
+		@Override public void approveSelection()
 		{
 			File file = getSelectedFile();
 			if (file != null && file.exists()) {
@@ -218,7 +218,7 @@ public class TTDViewer extends JFrame {
 		/* TODO Make this Play/Pause/Stop ? */
 		JCheckBox palette_anim = new JCheckBox("Palette Animation", true);
 		palette_anim.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e)
+			@Override public void stateChanged(ChangeEvent e)
 			{
 				JCheckBox source = (JCheckBox)(e.getSource());
 				if (source.isSelected()) {
@@ -230,7 +230,7 @@ public class TTDViewer extends JFrame {
 		});
 
 		ChangeListener rebuild_main_palette = new ChangeListener() {
-			public void stateChanged(ChangeEvent e)
+			@Override public void stateChanged(ChangeEvent e)
 			{
 				rebuildMainPalette();
 			}
@@ -303,7 +303,7 @@ public class TTDViewer extends JFrame {
 
 		JButton load_button = new JButton("open file");
 		load_button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
+			@Override public void actionPerformed(ActionEvent e)
 			{
 				int returnVal = fFileChooser.showOpenDialog(TTDViewer.this);
 
@@ -324,7 +324,7 @@ public class TTDViewer extends JFrame {
 		fSaveAsButton = new JButton("save as");
 		fSaveAsButton.setEnabled(false);
 		fSaveAsButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
+			@Override public void actionPerformed(ActionEvent e)
 			{
 				int returnVal = fFileSaveChooser.showSaveDialog(TTDViewer.this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -343,13 +343,13 @@ public class TTDViewer extends JFrame {
 		final JButton zoom_out_button = new JButton("zoom out");
 
 		ActionListener zoom_listener = new ActionListener() {
-			public void actionPerformed(ActionEvent e)
+			@Override public void actionPerformed(ActionEvent e)
 			{
 				fImage.setZoomAtCenter(fImage.getZoom() + (e.getSource() == zoom_in_button ? 1 : -1));
 			}
 		};
 		fImage.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e)
+			@Override public void stateChanged(ChangeEvent e)
 			{
 				fZoomLevel.setText(fImage.getZoom() + "x");
 			}

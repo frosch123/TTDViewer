@@ -166,7 +166,7 @@ public class TTDPalette extends Palette {
 			fSpeed = aSpeed;
 		}
 
-		public void applyPalette(int[] aPalette, int aAnimationCounter, boolean aToyland)
+		@Override public void applyPalette(int[] aPalette, int aAnimationCounter, boolean aToyland)
 		{
 			if (!enabled) aAnimationCounter = 0;
 			aAnimationCounter &= 0xFFFF;
@@ -238,7 +238,7 @@ public class TTDPalette extends Palette {
 			}
 		}
 
-		public void applyPalette(int[] aPalette, int aAnimationCounter, boolean aToyland)
+		@Override public void applyPalette(int[] aPalette, int aAnimationCounter, boolean aToyland)
 		{
 			if (!enabled) aAnimationCounter = 0;
 			aAnimationCounter &= 0xFFFF;
@@ -278,7 +278,7 @@ public class TTDPalette extends Palette {
 			fColorPalette = aColorPalette;
 		}
 
-		public void applyPalette(int[] aPalette, int aAnimationCounter, boolean aToyland)
+		@Override public void applyPalette(int[] aPalette, int aAnimationCounter, boolean aToyland)
 		{
 			if (!enabled) aAnimationCounter = 0;
 			aAnimationCounter = (aAnimationCounter >> 1) & 0x7F;
@@ -341,7 +341,7 @@ public class TTDPalette extends Palette {
 		buildPalette();
 
 		ActionListener anim_trigger = new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
+			@Override public void actionPerformed(ActionEvent evt) {
 				fAnimationCounter = (fAnimationCounter + 8) & 0xFFFF;
 				buildPalette();
 			}

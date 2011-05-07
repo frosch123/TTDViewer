@@ -59,7 +59,7 @@ public class TTDPalette extends Palette {
 		0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, // F0 - F7
 		0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0xFFFFFF  // F8 - FF
 	};
-	
+
 	/** Color index of transparency */
 	public static final int TRANSPARENT = 0x00;
 

@@ -13,7 +13,7 @@
 			<xs:length value="1"/>
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:simpleType name="hexByteList">
 		<xs:restriction>
 			<xs:simpleType>
@@ -87,7 +87,7 @@
 			</xs:restriction>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:complexType name="node_t">
 		<xs:sequence>
 			<xs:choice maxOccurs="unbounded">
@@ -98,7 +98,7 @@
 		</xs:sequence>
 		<xs:attributeGroup ref="nodeAttributes"/>
 	</xs:complexType>
-	
+
 	<xs:element name="sequence" type="node_t"/>
 	<xs:element name="choice" type="node_t"/>
 </xs:schema>

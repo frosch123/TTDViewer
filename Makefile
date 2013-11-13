@@ -41,6 +41,7 @@ validate:
 run: all
 	cd $(OUTPUT); $(JAVA) $(MAIN); cd ..
 
+maintainer-clean: clean
 clean:
 	rm -f $(OUTPUT)/*.class
 

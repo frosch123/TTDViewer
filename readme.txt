@@ -1,5 +1,5 @@
 TTDViewer ReadMe
-Last updated: 2010-01-24
+Last updated: 2013-11-13
 
 
 About:
@@ -18,8 +18,8 @@ Running TTDViewer:
 
 
 Obtaining the source:
-  The source is currently graciously hosted by the #OpenTTDCoop dev zone (http://dev.openttdcoop.org).
-  You can access the mercurial repository via http://mz.openttdcoop.org/hg/ttdviewer .
+  The source is currently graciously hosted by the #OpenTTDCoop DevZone (http://dev.openttdcoop.org).
+  You can access the mercurial repository via http://hg.openttdcoop.org/ttdviewer .
   Wrt. compiling on unixoid systems, please take a look at 'make help'. On windows you are on your own, sorry.
 
 
@@ -30,5 +30,4 @@ Contact:
 
 
 Credits:
-  Christoph Elsenhans (frosch) - Author; Copyright 2009, 2010
-
+  Christoph Elsenhans (frosch) - Author; Copyright 2009-2011, 2013

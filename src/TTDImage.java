@@ -41,7 +41,7 @@ public class TTDImage {
 	 */
 	public static TTDImage createBlank(TTDPalette aPalette, int aWidth, int aHeight)
 	{
-		IndexColorModel color_model = aPalette.getColorModel();
+		IndexColorModel color_model = aPalette.getColorModel(false);
 		WritableRaster pixel_data = color_model.createCompatibleWritableRaster(aWidth, aHeight);
 		return new TTDImage(pixel_data);
 	}

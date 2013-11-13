@@ -40,17 +40,28 @@ public class Palette extends DefaultChangeEventTrigger {
 	}
 
 	/** Build a IndexColorModel with the current palette and a certain recoloring applied. */
-	public IndexColorModel getColorModel(Recoloring aRecoloring)
+	public IndexColorModel getColorModel(Recoloring aRecoloring, boolean aTransparentAsBlue)
 	{
-		int[] palette = (aRecoloring != null) ? aRecoloring.transformPalette(fCurrentPalette) : fCurrentPalette;
+		int[] raw_palette;
+		if (aTransparentAsBlue) {
+			raw_palette = new int[256];
+			for (int i = 0; i < 256; i++) {
+				int c = fCurrentPalette[i];
+				if (c >> 24 == 0) c = 0xFF0000FF;
+				raw_palette[i] = c;
+			}
+		} else {
+			raw_palette = fCurrentPalette;
+		}
+		int[] palette = (aRecoloring != null) ? aRecoloring.transformPalette(raw_palette) : raw_palette;
 
-		return new IndexColorModel(8, 256, palette, 0, true, -1, DataBuffer.TYPE_BYTE);
+		return new IndexColorModel(8, 256, palette, 0, !aTransparentAsBlue, -1, DataBuffer.TYPE_BYTE);
 	}
 
 	/** Build a IndexColorModel with the current palette. */
-	public IndexColorModel getColorModel()
+	public IndexColorModel getColorModel(boolean aTransparentAsBlue)
 	{
-		return getColorModel(null);
+		return getColorModel(null, aTransparentAsBlue);
 	}
 
 	/** Get the RGBA value of a certain color of the current palette. */

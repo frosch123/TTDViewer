@@ -101,6 +101,7 @@ public class TTDViewer extends JFrame {
 			super.approveSelection();
 		}
 	};
+	static private JCheckBox fFileSaveTransparentAsBlue = new JCheckBox("save transparent as blue", true);
 	static private JCheckBox fFileSaveRecolor = new JCheckBox("save recolored", true);
 	static private JCheckBox fFileSaveZoom = new JCheckBox("save zoomed", false);
 	static private JCheckBox fFileSaveAnimState = new JCheckBox("use current animation state", false);
@@ -114,6 +115,7 @@ public class TTDViewer extends JFrame {
 
 		JPanel saveAsOptions = new JPanel();
 		saveAsOptions.setLayout(new BoxLayout(saveAsOptions, BoxLayout.Y_AXIS));
+		saveAsOptions.add(fFileSaveTransparentAsBlue);
 		saveAsOptions.add(fFileSaveRecolor);
 		saveAsOptions.add(fFileSaveZoom);
 		saveAsOptions.add(fFileSaveAnimState);
@@ -329,7 +331,7 @@ public class TTDViewer extends JFrame {
 				int returnVal = fFileSaveChooser.showSaveDialog(TTDViewer.this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					try {
-						fImage.saveTo(fFileSaveChooser.getSelectedFile(), "png", fFileSaveRecolor.isSelected(), fFileSaveZoom.isSelected(), fFileSaveAnimState.isSelected());
+						fImage.saveTo(fFileSaveChooser.getSelectedFile(), "png", fFileSaveTransparentAsBlue.isSelected(), fFileSaveRecolor.isSelected(), fFileSaveZoom.isSelected(), fFileSaveAnimState.isSelected());
 					} catch (Exception error) {
 						JOptionPane.showMessageDialog(TTDViewer.this, error.getMessage(), "Saving image failed", JOptionPane.ERROR_MESSAGE);
 					}

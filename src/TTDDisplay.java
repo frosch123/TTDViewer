@@ -86,14 +86,15 @@ public class TTDDisplay extends JPanel {
 	/**
 	 * Save the image to File.
 	 * @param aFile File to write to
+	 * @param aSaveTransparentAsBlue Save transparante pixels as blue pixels.
 	 * @param aSaveRecolored Save recolored
 	 * @param aSaveZoomed Save zoomed
 	 * @param aSaveAnimState Use the current animation state; else use a fixed state
 	 */
-	public void saveTo(File aFile, String aFileFormat, boolean aSaveRecolored, boolean aSaveZoomed, boolean aSaveAnimState) throws Exception
+	public void saveTo(File aFile, String aFileFormat, boolean aSaveTransparentAsBlue, boolean aSaveRecolored, boolean aSaveZoomed, boolean aSaveAnimState) throws Exception
 	{
 		Palette pal = aSaveAnimState ? fPalette : fPalette.getUnanimatedPalette();
-		IndexColorModel color_model = pal.getColorModel();
+		IndexColorModel color_model = pal.getColorModel(aSaveTransparentAsBlue);
 
 		WritableRaster pixel_data = fImage.getRaster();
 		int width = pixel_data.getWidth();
@@ -325,7 +326,7 @@ public class TTDDisplay extends JPanel {
 			g.fillRect(display_bounds.x, display_bounds.y, display_bounds.width, display_bounds.height);
 		}
 
-		ColorModel color_model = fPalette.getColorModel(fPalette.global_recoloring);
+		ColorModel color_model = fPalette.getColorModel(fPalette.global_recoloring, false);
 		g.drawImage(fImage.getImage(color_model, x, y, width, height), output_x, output_y, output_width, output_height, Color.WHITE, null);
 	}
 }

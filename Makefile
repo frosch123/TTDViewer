@@ -30,9 +30,9 @@ DOC = doc
 all: validate clean
 	@mkdir -p $(OUTPUT)
 	$(JAVAC) $(JAVAC_OPTS) -sourcepath $(SRC) -classpath $(OUTPUT) -d $(OUTPUT) -s $(OUTPUT) $(SRC)/*.java
-	hg parents --template="{date|shortdate} " > $(OUTPUT)/rev.txt
-	# hg identify also checks for local modifications
-	hg identify -i >> $(OUTPUT)/rev.txt
+	git show -s --date=short --pretty='format:%cd %h' HEAD > $(OUTPUT)/rev.txt
+	git update-index --refresh >/dev/null || true
+	if [ -n "`git diff-index HEAD`" ]; then (echo "M" >>  $(OUTPUT)/rev.txt); fi
 	cp -u $(SRC)/*.xml $(SRC)/*.xsd $(OUTPUT)
 
 validate:
